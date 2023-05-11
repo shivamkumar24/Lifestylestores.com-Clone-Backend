@@ -4,11 +4,73 @@ const { MenModel } = require("../models/men.model");
 
 // GET
 menRouter.get("/", async (req, res) => {
-  try {
-    const mens = await MenModel.find();
-    res.status(200).send({ mens });
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
+  const { sort, order, category, page } = req.query;
+
+  if (sort === "price" && order && category) {
+    // Here we check sorting by price and category
+    if (order === "asc") {
+      try {
+        const mens = await MenModel.find({ category: category }).sort({
+          price: +1,
+        });
+        res.status(200).send({ mens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const mens = await MenModel.find({ category: category }).sort({
+          price: -1,
+        });
+        res.status(200).send({ mens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    }
+  } else if (category) {
+    // Here we check category wise
+    try {
+      const mens = await MenModel.find({ category: category });
+      res.status(200).send({ mens });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  } else if (sort === "price" && order) {
+    // Here we check sorting by price
+    if (order === "asc") {
+      try {
+        const mens = await MenModel.find().sort({ price: +1 });
+        res.status(200).send({ mens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const mens = await MenModel.find({ category: category }).sort({
+          price: -1,
+        });
+        res.status(200).send({ mens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    }
+  } else if (page) {
+    // Here check by page number
+    try {
+      const mens = await MenModel.find()
+        .skip(12 * Number(page - 1))
+        .limit(12);
+      res.status(200).send({ mens });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  } else {
+    try {
+      const mens = await MenModel.find();
+      res.status(200).send({ mens });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
   }
 });
 
