@@ -44,6 +44,7 @@ adminRouter.post("/login", async (req, res) => {
           res.status(200).send({
             msg: "Admin Login Successfully",
             token: jwt.sign({ adminID: admin._id }, "avengers"),
+            admin: admin,
           });
         } else {
           res.status(400).send({ msg: "Wrong Credentials" });
