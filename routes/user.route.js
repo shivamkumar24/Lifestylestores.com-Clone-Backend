@@ -4,6 +4,16 @@ const { UserModel } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// GET
+userRouter.get("/", async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.status(200).send({ users });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // Register
 userRouter.post("/register", async (req, res) => {
   const { name, email, phone, password, address } = req.body;

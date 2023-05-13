@@ -4,6 +4,16 @@ const { AdminModel } = require("../models/admin.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// GET
+adminRouter.get("/", async (req, res) => {
+  try {
+    const admins = await AdminModel.find();
+    res.status(200).send({ admins });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // Register
 adminRouter.post("/register", async (req, res) => {
   const { name, email, phone, password } = req.body;
