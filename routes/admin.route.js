@@ -18,7 +18,7 @@ adminRouter.get("/", async (req, res) => {
 adminRouter.post("/register", async (req, res) => {
   const { name, email, phone, password } = req.body;
   try {
-    bcrypt.hash(password, 5, async (err, hash) => {
+    bcrypt.hash(password, 5, async (error, hash) => {
       const admin = new AdminModel({
         name,
         email,
@@ -28,8 +28,8 @@ adminRouter.post("/register", async (req, res) => {
       await admin.save();
       res.status(200).send("Admin Registration Successfully");
     });
-  } catch (err) {
-    res.status(400).send("Admin Registartion failed");
+  } catch (error) {
+    res.status(400).send("Admin Registartion failed", error);
   }
 });
 
@@ -39,7 +39,7 @@ adminRouter.post("/login", async (req, res) => {
   try {
     const admin = await AdminModel.findOne({ email });
     if (admin) {
-      bcrypt.compare(password, admin.password, (err, result) => {
+      bcrypt.compare(password, admin.password, (error, result) => {
         if (result) {
           res.status(200).send({
             msg: "Admin Login Successfully",
@@ -50,8 +50,8 @@ adminRouter.post("/login", async (req, res) => {
         }
       });
     }
-  } catch (err) {
-    res.status(400).send("Error: ", err);
+  } catch (error) {
+    res.status(400).send("Error: ", error);
   }
 });
 

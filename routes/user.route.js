@@ -18,7 +18,7 @@ userRouter.get("/", async (req, res) => {
 userRouter.post("/register", async (req, res) => {
   const { name, email, phone, password, address } = req.body;
   try {
-    bcrypt.hash(password, 5, async (err, hash) => {
+    bcrypt.hash(password, 5, async (error, hash) => {
       const user = new UserModel({
         name,
         email,
@@ -29,8 +29,8 @@ userRouter.post("/register", async (req, res) => {
       await user.save();
       res.status(200).send("User Registration Successfully");
     });
-  } catch (err) {
-    res.status(400).send("User Registartion failed");
+  } catch (error) {
+    res.status(400).send("User Registartion failed", error);
   }
 });
 
@@ -40,7 +40,7 @@ userRouter.post("/login", async (req, res) => {
   try {
     const user = await UserModel.findOne({ email });
     if (user) {
-      bcrypt.compare(password, user.password, (err, result) => {
+      bcrypt.compare(password, user.password, (error, result) => {
         if (result) {
           res.status(200).send({
             msg: "User Login Successfully",
@@ -51,8 +51,8 @@ userRouter.post("/login", async (req, res) => {
         }
       });
     }
-  } catch (err) {
-    res.status(400).send("Error: ", err);
+  } catch (error) {
+    res.status(400).send("Error: ", error);
   }
 });
 
