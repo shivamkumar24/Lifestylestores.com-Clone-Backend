@@ -46,7 +46,7 @@ bagRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const bags = await BagModel.find({ category: category }).sort({
+        const bags = await BagModel.find().sort({
           price: -1,
         });
         res.status(200).send({ bags });

@@ -46,7 +46,7 @@ kidRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const kids = await KidModel.find({ category: category }).sort({
+        const kids = await KidModel.find().sort({
           price: -1,
         });
         res.status(200).send({ kids });

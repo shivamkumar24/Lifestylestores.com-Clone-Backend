@@ -46,7 +46,7 @@ beautyRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const beauties = await BeautyModel.find({ category: category }).sort({
+        const beauties = await BeautyModel.find().sort({
           price: -1,
         });
         res.status(200).send({ beauties });

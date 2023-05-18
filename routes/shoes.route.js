@@ -46,7 +46,7 @@ shoesRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const shoes = await ShoesModel.find({ category: category }).sort({
+        const shoes = await ShoesModel.find().sort({
           price: -1,
         });
         res.status(200).send({ shoes });
