@@ -6,6 +6,30 @@ const { KidModel } = require("../models/kid.model");
 kidRouter.get("/", async (req, res) => {
   const { sort, order, category, page } = req.query;
 
+  if (sort === "price" && order && category && page) {
+    if (order === "asc") {
+      try {
+        const kids = await KidModel.find({ category: category })
+          .sort({ price: +1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ kids });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const kids = await KidModel.find({ category: category })
+          .sort({ price: -1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ kids });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    }
+  }
+
   if (sort === "price" && order && category) {
     // Here we check sorting by price and category
     if (order === "asc") {
@@ -27,15 +51,33 @@ kidRouter.get("/", async (req, res) => {
         res.status(400).send({ msg: error.message });
       }
     }
-  } else if (category) {
-    // Here we check category wise
-    try {
-      const kids = await KidModel.find({ category: category });
-      res.status(200).send({ kids });
-    } catch (error) {
-      res.status(400).send({ msg: error.message });
+  }
+
+  if (sort === "price" && order && page) {
+    if (order === "asc") {
+      try {
+        const kids = await KidModel.find()
+          .sort({ price: +1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ kids });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const kids = await KidModel.find()
+          .sort({ price: -1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ kids });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
     }
-  } else if (sort === "price" && order) {
+  }
+
+  if (sort === "price" && order) {
     // Here we check sorting by price
     if (order === "asc") {
       try {
@@ -46,15 +88,36 @@ kidRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const kids = await KidModel.find().sort({
-          price: -1,
-        });
+        const kids = await KidModel.find().sort({ price: -1 });
         res.status(200).send({ kids });
       } catch (error) {
         res.status(400).send({ msg: error.message });
       }
     }
-  } else if (page) {
+  }
+
+  if (category && page) {
+    try {
+      const kids = await KidModel.find({ category: category })
+        .skip(12 * Number(page - 1))
+        .limit(12);
+      res.status(200).send({ kids });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  }
+
+  if (category) {
+    // Here we check category wise
+    try {
+      const kids = await KidModel.find({ category: category });
+      res.status(200).send({ kids });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  }
+
+  if (page) {
     // Here check by page number
     try {
       const kids = await KidModel.find()
@@ -64,7 +127,14 @@ kidRouter.get("/", async (req, res) => {
     } catch (error) {
       res.status(400).send({ msg: error.message });
     }
-  } else {
+  }
+
+  if (
+    page === undefined &&
+    sort === undefined &&
+    order === undefined &&
+    category === undefined
+  ) {
     try {
       const kids = await KidModel.find();
       res.status(200).send({ kids });

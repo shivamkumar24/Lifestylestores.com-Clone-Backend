@@ -6,6 +6,34 @@ const { WomenModel } = require("../models/women.model");
 womenRouter.get("/", async (req, res) => {
   const { sort, order, category, page } = req.query;
 
+  if (sort === "price" && order && category && page) {
+    if (order === "asc") {
+      try {
+        const womens = await WomenModel.find({ category: category })
+          .sort({
+            price: +1,
+          })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ womens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const womens = await WomenModel.find({ category: category })
+          .sort({
+            price: -1,
+          })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ womens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    }
+  }
+
   if (sort === "price" && order && category) {
     // Here we check sorting by price and category
     if (order === "asc") {
@@ -27,15 +55,33 @@ womenRouter.get("/", async (req, res) => {
         res.status(400).send({ msg: error.message });
       }
     }
-  } else if (category) {
-    // Here we check category wise
-    try {
-      const womens = await WomenModel.find({ category: category });
-      res.status(200).send({ womens });
-    } catch (error) {
-      res.status(400).send({ msg: error.message });
+  }
+
+  if (sort === "price" && order && page) {
+    if (order === "asc") {
+      try {
+        const womens = await WomenModel.find()
+          .sort({ price: +1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ womens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
+    } else if (order === "desc") {
+      try {
+        const womens = await WomenModel.find()
+          .sort({ price: -1 })
+          .skip(12 * Number(page - 1))
+          .limit(12);
+        res.status(200).send({ womens });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
+      }
     }
-  } else if (sort === "price" && order) {
+  }
+
+  if (sort === "price" && order) {
     // Here we check sorting by price
     if (order === "asc") {
       try {
@@ -46,15 +92,36 @@ womenRouter.get("/", async (req, res) => {
       }
     } else if (order === "desc") {
       try {
-        const womens = await WomenModel.find().sort({
-          price: -1,
-        });
+        const womens = await WomenModel.find().sort({ price: -1 });
         res.status(200).send({ womens });
       } catch (error) {
         res.status(400).send({ msg: error.message });
       }
     }
-  } else if (page) {
+  }
+
+  if (category && page) {
+    try {
+      const womens = await WomenModel.find({ category: category })
+        .skip(12 * Number(page - 1))
+        .limit(12);
+      res.status(200).send({ womens });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  }
+
+  if (category) {
+    // Here we check category wise
+    try {
+      const womens = await WomenModel.find({ category: category });
+      res.status(200).send({ womens });
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  }
+
+  if (page) {
     // Here check by page number
     try {
       const womens = await WomenModel.find()
@@ -64,7 +131,14 @@ womenRouter.get("/", async (req, res) => {
     } catch (error) {
       res.status(400).send({ msg: error.message });
     }
-  } else {
+  }
+
+  if (
+    page === undefined &&
+    sort === undefined &&
+    order === undefined &&
+    category === undefined
+  ) {
     try {
       const womens = await WomenModel.find();
       res.status(200).send({ womens });
