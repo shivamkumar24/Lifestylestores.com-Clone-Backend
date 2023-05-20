@@ -142,6 +142,19 @@ menRouter.get("/", async (req, res) => {
   }
 });
 
+// GET By ID
+menRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const mens = await MenModel.findById({ _id: id });
+    res.status(200).send({ mens });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // POST
 menRouter.post("/add", async (req, res) => {
   try {

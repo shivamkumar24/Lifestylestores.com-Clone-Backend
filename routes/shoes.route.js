@@ -144,6 +144,19 @@ shoesRouter.get("/", async (req, res) => {
   }
 });
 
+// GET By ID
+shoesRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const shoes = await ShoesModel.findById({ _id: id });
+    res.status(200).send({ shoes });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // POST
 shoesRouter.post("/add", async (req, res) => {
   try {

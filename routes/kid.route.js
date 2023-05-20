@@ -144,6 +144,19 @@ kidRouter.get("/", async (req, res) => {
   }
 });
 
+// GET By ID
+kidRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const kids = await KidModel.findById({ _id: id });
+    res.status(200).send({ kids });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // POST
 kidRouter.post("/add", async (req, res) => {
   try {

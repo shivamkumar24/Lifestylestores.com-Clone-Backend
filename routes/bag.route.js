@@ -144,6 +144,19 @@ bagRouter.get("/", async (req, res) => {
   }
 });
 
+// GET By ID
+bagRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const bags = await BagModel.findById({ _id: id });
+    res.status(200).send({ bags });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 // POST
 bagRouter.post("/add", async (req, res) => {
   try {
