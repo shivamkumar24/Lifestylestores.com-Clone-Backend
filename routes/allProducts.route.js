@@ -15,9 +15,9 @@ allProductsRouter.get("/", async (req, res) => {
 // POST
 allProductsRouter.post("/add", async (req, res) => {
   try {
-    // const newProductItem = new AllProductsModel(req.body);
-    // await newProductItem.save();
-    await AllProductsModel.insertMany(req.body);
+    const newProductItem = new AllProductsModel(req.body);
+    await newProductItem.save();
+    // await AllProductsModel.insertMany(req.body);
     res.status(200).send({ msg: "New product item added" });
   } catch (error) {
     res.status(400).send({ msg: error.message });
