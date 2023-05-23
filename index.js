@@ -11,6 +11,7 @@ const { bagRouter } = require("./routes/bag.route");
 const { beautyRouter } = require("./routes/beauty.route");
 const { allProductsRouter } = require("./routes/allProducts.route");
 const { authMiddleware } = require("./middlewares/auth.middleware");
+const { cartRouter } = require("./routes/cart.route");
 
 require("dotenv").config();
 
@@ -28,6 +29,7 @@ app.use("/bag", bagRouter);
 app.use("/beauty", beautyRouter);
 app.use("/allproduct", allProductsRouter);
 app.use(authMiddleware);
+app.use("/cart", cartRouter);
 
 app.listen(process.env.PORT, async () => {
   try {
