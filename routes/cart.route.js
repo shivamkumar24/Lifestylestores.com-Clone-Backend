@@ -11,7 +11,7 @@ cartRouter.get("/", async (req, res) => {
       const decoded = jwt.verify(token, "avengers");
       if (decoded) {
         const cartData = await CartModel.find({ userID: decoded.userID });
-        res.status(200).send({ msg: cartData });
+        res.status(200).send({ cartData: cartData });
       } else {
         res.status(400).send({ msg: "userID not found !!!" });
       }
