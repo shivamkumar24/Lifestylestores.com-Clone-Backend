@@ -56,6 +56,19 @@ adminRouter.post("/login", async (req, res) => {
   }
 });
 
+// DELETE
+adminRouter.delete("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("Delete Request id: ", id);
+
+  try {
+    await AdminModel.findByIdAndDelete({ _id: id });
+    res.status(200).send({ msg: "Admin record deleted successfully" });
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
 module.exports = {
   adminRouter,
 };
