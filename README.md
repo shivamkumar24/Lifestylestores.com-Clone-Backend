@@ -68,10 +68,10 @@ The API is currently deployed at: https://calm-tutu-bass.cyclic.app/
 
    1. Get Admin
 
-   - Endpoint: `/admin`
-   - Method: `GET`
-   - Description: Fetches all the admin entries from the backend.
-   - Response: An array of admins objects.
+      - Endpoint: `/admin`
+      - Method: `GET`
+      - Description: Fetches all the admin entries from the backend.
+      - Response: An array of admins objects.
 
    2. Register Admin
 
