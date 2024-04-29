@@ -6,51 +6,6 @@ const { MenModel } = require("../models/men.model");
 menRouter.get("/", async (req, res) => {
   const { sort, order, category, page } = req.query;
 
-  if (sort === "price" && order && category) {
-    // Here we check sorting by price and category
-    if (order === "asc") {
-      try {
-        const mens = await MenModel.find({ category: category }).sort({
-          price: +1,
-        });
-        res.status(200).send({ mens });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
-      }
-    } else if (order === "desc") {
-      try {
-        const mens = await MenModel.find({ category: category }).sort({
-          price: -1,
-        });
-        res.status(200).send({ mens });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
-      }
-    }
-  }
-
-  if (sort === "price" && order && category) {
-    if (order === "asc") {
-      try {
-        const mens = await MenModel.find({ category: category }).sort({
-          price: +1,
-        });
-        res.status(200).send({ mens });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
-      }
-    } else if (order === "desc") {
-      try {
-        const mens = await MenModel.find({ category: category }).sort({
-          price: -1,
-        });
-        res.status(200).send({ mens });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
-      }
-    }
-  }
-
   if (sort === "price" && order && page) {
     if (order === "asc") {
       try {
@@ -73,28 +28,28 @@ menRouter.get("/", async (req, res) => {
         res.status(400).send({ msg: error.message });
       }
     }
-  }
-
-  if (sort === "price" && order) {
-    // Here we check sorting by price
+  } else if (sort === "price" && order && category) {
+    // Here we check sorting by price and category
     if (order === "asc") {
       try {
-        const mens = await MenModel.find().sort({ price: +1 });
+        const mens = await MenModel.find({ category: category }).sort({
+          price: +1,
+        });
         res.status(200).send({ mens });
       } catch (error) {
         res.status(400).send({ msg: error.message });
       }
     } else if (order === "desc") {
       try {
-        const mens = await MenModel.find().sort({ price: -1 });
+        const mens = await MenModel.find({ category: category }).sort({
+          price: -1,
+        });
         res.status(200).send({ mens });
       } catch (error) {
         res.status(400).send({ msg: error.message });
       }
     }
-  }
-
-  if (category && page) {
+  } else if (category && page) {
     try {
       const mens = await MenModel.find({ category: category })
         .skip(12 * Number(page - 1))
@@ -103,38 +58,12 @@ menRouter.get("/", async (req, res) => {
     } catch (error) {
       res.status(400).send({ msg: error.message });
     }
-  }
-
-  if (category) {
-    // Here we check category wise
-    try {
-      const mens = await MenModel.find({ category: category });
-      res.status(200).send({ mens });
-    } catch (error) {
-      res.status(400).send({ msg: error.message });
-    }
-  }
-
-  if (page) {
+  } else if ((page, sort)) {
     // Here check by page number
     try {
       const mens = await MenModel.find()
         .skip(12 * Number(page - 1))
         .limit(12);
-      res.status(200).send({ mens });
-    } catch (error) {
-      res.status(400).send({ msg: error.message });
-    }
-  }
-
-  if (
-    page === undefined &&
-    sort === undefined &&
-    order === undefined &&
-    category === undefined
-  ) {
-    try {
-      const mens = await MenModel.find();
       res.status(200).send({ mens });
     } catch (error) {
       res.status(400).send({ msg: error.message });
